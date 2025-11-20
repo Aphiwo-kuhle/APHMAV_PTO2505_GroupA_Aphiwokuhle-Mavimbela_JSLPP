@@ -11,30 +11,24 @@
     
 
     <!-- SIDEBAR -->
-<aside class="side-panel" id="sidebar">
-  <!-- Logo -->
-  <img class="app-logo desktop-logo" src="assets/logo-light.svg" alt="Logo" />
 
-  <!-- Boards -->
-  <p class="all-boards">ALL BOARDS (1)</p>
-  <div class="board-pill" id="boardName">Launch Career</div>
-
-  <div class="bottom-area"></div>
-
-  <!-- Theme Toggle -->
-  <div class="theme-toggle">
-    <span>🌞</span>
-    <label class="switch">
-      <input type="checkbox" id="themeToggle" />
-      <span class="slider round"></span>
-    </label>
-    <span>🌙</span>
+<div class="sidebar">
+  <div class="sidebar-icon active">
+    <img src="assets/icon-board.svg" alt="Board" />
   </div>
 
-  <!-- Sidebar Toggle (mobile) -->
-  <button id="sidebarToggle" class="sidebar-toggle">☰</button>
-  
-</aside>
+  <div class="sidebar-icon">
+    <img src="assets/icon-calendar.svg" alt="Calendar" />
+  </div>
+
+  <div class="sidebar-icon">
+    <img src="assets/icon-settings.svg" alt="Settings" />
+  </div>
+
+  <div class="sidebar-icon">
+    <img src="assets/icon-user.svg" alt="Profile" />
+  </div>
+</div>
 
 
     <!-- TOP HEADER -->
@@ -55,65 +49,67 @@
         <button id="addTaskMobile" class="circle-btn" aria-label="Add Task">+</button>
       </div>
     </header>
+<div class="board">
 
-    <!-- KANBAN COLUMNS -->
-    <section class="column todo" data-col="todo" style="grid-area: todo;">
-      <div class="column-inner">
-        <p class="task-names"><span class="dot"></span><span id="todoTitle">TODO (0)</span></p>
-        <div id="todoList" class="task-list"></div>
-      </div>
-    </section>
-
-    <section class="column doing" data-col="doing" style="grid-area: doing;">
-      <div class="column-inner">
-        <p class="task-names"><span class="dot"></span><span id="doingTitle">DOING (0)</span></p>
-        <div id="doingList" class="task-list"></div>
-      </div>
-    </section>
-
-    <section class="column done" data-col="done" style="grid-area: done;">
-      <div class="column-inner">
-        <p class="task-names"><span class="dot"></span><span id="doneTitle">DONE (0)</span></p>
-        <div id="doneList" class="task-list"></div>
-      </div>
-    </section>
+  <div class="column">
+    <h2>To Do</h2>
+    <div class="column-tasks" id="todo-column"></div>
+    <div class="add-task-btn" data-status="todo">+ Add Task</div>
   </div>
+
+  <div class="column">
+    <h2>Doing</h2>
+    <div class="column-tasks" id="doing-column"></div>
+    <div class="add-task-btn" data-status="doing">+ Add Task</div>
+  </div>
+
+  <div class="column">
+    <h2>Done</h2>
+    <div class="column-tasks" id="done-column"></div>
+    <div class="add-task-btn" data-status="done">+ Add Task</div>
+  </div>
+
+</div>
 
   <!-- Floating Add Button (optional) -->
   <button id="addTaskFab" class="fab" aria-label="Add Task">+</button>
 
-  <!-- MODAL -->
-  <div id="modal" class="modal hidden" aria-hidden="true" role="dialog" aria-labelledby="modalTitle">
-    <div class="modal-content" role="document">
-      <button class="close-btn" id="closeModal" aria-label="Close">×</button>
-      <h2 id="modalTitle">Add New Task</h2>
+ <!-- MODAL OVERLAY -->
+<div id="modal-overlay" class="modal-overlay hidden"></div>
 
-      <form id="taskForm" novalidate>
-        <input type="hidden" id="taskId" />
+<!-- MODAL -->
+<div id="task-modal" class="modal hidden">
 
-        <label for="title">Title</label>
-        <input id="title" name="title" type="text" placeholder="e.g., Launch Epic Career 🚀" required />
+  <h2 id="modal-title">Add Task</h2>
 
-        <label for="desc">Description</label>
-        <textarea id="desc" name="desc" rows="3" placeholder="A short description..."></textarea>
+  <label>Title</label>
+  <input id="modal-title-input" type="text" placeholder="Enter task title" />
 
-        <label for="status">Status</label>
-        <select id="status" name="status" required>
-          <option value="todo">To Do</option>
-          <option value="doing">Doing</option>
-          <option value="done">Done</option>
-        </select>
+  <label>Description</label>
+  <textarea id="modal-desc-input" placeholder="Write a short description..."></textarea>
 
-        <div class="modal-actions">
-          <!-- Primary submit toggles between create and save -->
-          <button type="submit" class="primary" id="primaryAction">Create Task</button>
-          <!-- When viewing a task, show Edit / Delete buttons -->
-          <button type="button" class="secondary" id="editAction" style="display:none">Edit</button>
-          <button type="button" class="danger" id="deleteAction" style="display:none">Delete</button>
-        </div>
-      </form>
-    </div>
+  <label>Priority</label>
+  <div class="priority-options">
+    <button class="priority-btn" data-value="High">High</button>
+    <button class="priority-btn" data-value="Medium">Medium</button>
+    <button class="priority-btn" data-value="Low">Low</button>
   </div>
+
+  <label>Status</label>
+  <select id="modal-status-input">
+    <option value="todo">To Do</option>
+    <option value="doing">Doing</option>
+    <option value="done">Done</option>
+  </select>
+
+  <div class="modal-actions">
+    <button id="delete-task-btn" class="delete-btn hidden">Delete</button>
+    <button id="cancel-btn" class="cancel-btn">Cancel</button>
+    <button id="save-btn" class="save-btn">Save</button>
+  </div>
+
+</div>
+
 
   <script type="module" src="main.js"></script>
 

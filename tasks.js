@@ -68,3 +68,32 @@ function escapeHtml(str) {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
 }
+export function createTaskCard(task) {
+  const card = document.createElement("div");
+  card.classList.add("task-card");
+  card.dataset.id = task.id;
+
+  card.innerHTML = `
+    <div class="task-title">${task.title}</div>
+    <div class="task-desc">${task.description}</div>
+    <div class="priority-tag ${getPriorityClass(task.priority)}">
+      ${task.priority}
+    </div>
+  `;
+
+  // Click event to open modal for editing later
+  card.addEventListener("click", () => {
+    openModal(task.status, task);
+  });
+
+  return card;
+}
+
+function getPriorityClass(level) {
+  switch (level) {
+    case "High": return "priority-high";
+    case "Medium": return "priority-medium";
+    case "Low": return "priority-low";
+    default: return "";
+  }
+}

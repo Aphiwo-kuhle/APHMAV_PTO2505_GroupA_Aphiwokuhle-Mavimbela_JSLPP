@@ -91,3 +91,127 @@ function setupSidebarToggle() {
     sidebar.classList.toggle("open");
   });
 }
+document.querySelectorAll('.sidebar-icon').forEach(icon => {
+  icon.addEventListener('click', () => {
+    document.querySelector('.sidebar-icon.active')?.classList.remove('active');
+    icon.classList.add('active');
+  });
+});
+document.querySelectorAll('.add-task-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const status = btn.dataset.status;
+    openModal(status);
+  });
+});
+function renderTasks() {
+  const todoCol = document.getElementById("todo-column");
+  const doingCol = document.getElementById("doing-column");
+  const doneCol = document.getElementById("done-column");
+
+  todoCol.innerHTML = "";
+  doingCol.innerHTML = "";
+  doneCol.innerHTML = "";
+
+  tasks.forEach(task => {
+    const card = createTaskCard(task);
+
+    if (task.status === "todo") todoCol.appendChild(card);
+    else if (task.status === "doing") doingCol.appendChild(card);
+    else if (task.status === "done") doneCol.appendChild(card);
+  });
+}
+let editingTask = null;
+
+export function openModal(status, task = null) {
+  const modal = document.getElementById("task-modal");
+  const overlay = document.getElementById("modal-overlay");
+
+  modal.classList.add("show");
+  modal.classList.remove("hidden");
+  overlay.classList.remove("hidden");
+
+  document.getElementById("modal-status-input").value = status;
+
+  if (task) {
+    editingTask = task;
+    document.getElementById("modal-title").textContent = "Edit Task";
+    document.getElementById("modal-title-input").value = task.title;
+    document.getElementById("modal-desc-input").value = task.description;
+    document.getElementById("delete-task-btn").classList.remove("hidden");
+
+    setPriority(task.priority);
+  } else {
+    editingTask = null;
+    document.getElementById("modal-title").textContent = "Add Task";
+    document.getElementById("modal-title-input").value = "";
+    document.getElementById("modal-desc-input").value = "";
+    document.getElementById("delete-task-btn").classList.add("hidden");
+
+    setPriority(null);
+  }
+}
+
+export function closeModal() {
+  document.getElementById("task-modal").classList.add("hidden");
+  document.getElementById("modal-overlay").classList.add("hidden");
+}
+
+/* Priority Selector */
+document.querySelectorAll(".priority-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    setPriority(btn.dataset.value);
+  });
+});
+
+function setPriority(value) {
+  document.querySelectorAll(".priority-btn").forEach(btn => {
+    btn.classList.remove("active");
+    if (btn.dataset.value === value) {
+      btn.classList.add("active");
+    }
+  });
+}
+
+/* SAVE TASK */
+document.getElementById("save-btn").addEventListener("click", () => {
+  const title = document.getElementById("modal-title-input").value;
+  const desc  = document.getElementById("modal-desc-input").value;
+  const status = document.getElementById("modal-status-input").value;
+  const priority = document.querySelector(".priority-btn.active")?.dataset.value;
+
+  if (!title || !priority) return alert("Please fill all fields");
+
+  if (editingTask) {
+    editingTask.title = title;
+    editingTask.description = desc;
+    editingTask.status = status;
+    editingTask.priority = priority;
+  } else {
+    tasks.push({
+      id: crypto.randomUUID(),
+      title,
+      description: desc,
+      status,
+      priority
+    });
+  }
+
+  saveTasks();
+  renderTasks();
+  closeModal();
+});
+
+/* DELETE TASK */
+document.getElementById("delete-task-btn").addEventListener("click", () => {
+  if (!editingTask) return;
+
+  tasks = tasks.filter(t => t.id !== editingTask.id);
+
+  saveTasks();
+  renderTasks();
+  closeModal();
+});
+
+/* CANCEL BUTTON */
+document.getElementById("cancel-btn").addEventListener("click", closeModal);
+document.getElementById("modal-overlay").addEventListener("click", closeModal);
