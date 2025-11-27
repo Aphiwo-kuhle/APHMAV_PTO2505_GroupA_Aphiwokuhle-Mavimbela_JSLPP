@@ -1,6 +1,3 @@
-/* ============================================= */
-/* ROOT VARIABLES                                */
-/* ============================================= */
 :root {
   --bg: #f4f7fd;
   --card: #ffffff;
@@ -8,184 +5,134 @@
   --muted: #828fa3;
   --accent: #635fc7;
   --accent-hover: #a8a4ff;
-  --danger: #ea5555;
-  --danger-hover: #ff9898;
-
   --todo: #49c4e5;
   --doing: #8471f2;
   --done: #67e2ae;
-
-  --shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+  --danger: #ea5555;
+  --shadow: 0 4px 10px rgba(0,0,0,0.06);
 }
 
-/* Dark mode variables */
+/* Dark theme */
 body.dark {
   --bg: #20212c;
   --card: #2b2c37;
   --text: #ffffff;
-  --muted: #828fa3;
-  --accent: #635fc7;
-  --accent-hover: #a8a4ff;
   --shadow: none;
 }
 
-/* ============================================= */
-/* GLOBAL RESET                                  */
-/* ============================================= */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: system-ui, sans-serif;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui; }
 
 body {
   background: var(--bg);
   color: var(--text);
-  display: flex;
   height: 100vh;
   overflow: hidden;
+  display: flex;
 }
 
-/* ============================================= */
-/* SIDEBAR                                       */
-/* ============================================= */
+/* SIDEBAR */
 .sidebar {
   width: 260px;
   background: var(--card);
+  height: 100%;
   padding: 24px;
   border-right: 1px solid #e4ebfa;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  transition: transform 0.3s ease;
-  z-index: 20;
+  position: fixed;
+  left: 0;
+  top: 0;
+  transition: transform .3s ease;
+  z-index: 100;
 }
 
-body.dark .sidebar {
-  border-right: 1px solid #3e3f4e;
-}
+.sidebar.hidden { transform: translateX(-100%); }
 
-.sidebar.hidden {
-  transform: translateX(-100%);
-}
+.sidebar-logo { width: 140px; }
 
-/* Sidebar Logo */
-.sidebar-header {
-  display: flex;
-  justify-content: flex-start;
-}
-.sidebar-logo {
-  width: 140px;
-}
-
-/* Sidebar Title */
 .sidebar-title {
   font-size: 14px;
-  letter-spacing: 2px;
   color: var(--muted);
+  margin-top: 20px;
 }
 
-/* Board Item */
 .board-item {
   padding: 12px;
   border-radius: 6px;
-  cursor: pointer;
   color: var(--muted);
-}
-.board-item.active {
-  background: var(--accent);
-  color: white;
+  cursor: pointer;
 }
 
-/* Theme Toggle */
+.board-item.active { background: var(--accent); color: #fff; }
+
 .theme-toggle-block {
   margin-top: auto;
-  background: var(--bg);
-  padding: 10px;
-  border-radius: 8px;
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  padding: 10px;
+  background: var(--bg);
+  border-radius: 8px;
 }
 
-/* Toggle Switch */
-.switch {
-  position: relative;
-  width: 40px;
-  height: 20px;
-}
-.switch input {
-  display: none;
-}
+.switch { width: 40px; height: 20px; position: relative; }
+.switch input { display: none; }
 .slider {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  position: absolute; inset: 0;
   background: var(--accent);
   border-radius: 20px;
-  transition: 0.3s;
 }
 .slider:before {
-  position: absolute;
   content: "";
-  width: 16px;
-  height: 16px;
+  width: 16px; height: 16px;
   background: white;
-  border-radius: 50%;
-  top: 2px;
-  left: 2px;
-  transition: 0.3s;
-}
-input:checked + .slider:before {
-  transform: translateX(20px);
-}
-
-/* Hide Sidebar Button */
-.hide-sidebar-btn {
-  margin-top: 12px;
-  background: none;
-  border: none;
-  color: var(--muted);
-  font-size: 14px;
-  cursor: pointer;
-  padding: 10px;
-}
-.hide-sidebar-btn:hover {
-  color: var(--accent);
-}
-
-/* Eye Button (Show Sidebar) */
-.show-sidebar-btn {
   position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  background: var(--accent);
+  left: 2px; top: 2px;
+  border-radius: 50%;
+  transition: .3s;
+}
+input:checked + .slider:before { transform: translateX(20px); }
+
+.hide-sidebar-btn {
   border: none;
-  color: white;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.show-sidebar-btn {
+  position: fixed;
+  left: 10px; top: 20px;
+  background: var(--accent);
   padding: 10px 14px;
-  border-radius: 0 6px 6px 0;
+  color: white;
+  border-radius: 6px;
+  border: none;
   cursor: pointer;
   display: none;
-  z-index: 25;
+  z-index: 120;
 }
 
-/* ============================================= */
-/* MAIN CONTENT                                  */
-/* ============================================= */
+.show-sidebar-btn.visible { display: block; }
+
+.close-sidebar-btn {
+  display: none;
+  font-size: 32px;
+  border: none;
+  background: none;
+  margin-left: auto;
+  cursor: pointer;
+}
+
+/* CONTENT */
 .content {
-  flex: 1;
+  margin-left: 260px;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  transition: margin-left .3s ease;
 }
 
-/* ============================================= */
-/* TOP BAR                                       */
-/* ============================================= */
+.content.no-sidebar { margin-left: 0; }
+
 .top-bar {
   background: var(--card);
   padding: 24px;
@@ -195,48 +142,25 @@ input:checked + .slider:before {
   align-items: center;
 }
 
-body.dark .top-bar {
-  border-bottom: 1px solid #3e3f4e;
-}
-
-.top-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.mobile-logo {
-  display: none;
-  width: 32px;
-}
-
 .primary-btn {
-  background: var(--accent);
-  border: none;
-  color: white;
   padding: 12px 20px;
+  border: none;
   border-radius: 20px;
-  cursor: pointer;
-}
-.primary-btn:hover {
-  background: var(--accent-hover);
+  background: var(--accent);
+  color: white;
 }
 
-/* Circle Button (Mobile Add Task) */
 .circle-btn {
   display: none;
-  background: var(--accent);
-  color: white;
-  font-size: 24px;
-  border: none;
   width: 44px;
   height: 44px;
   border-radius: 50%;
+  border: none;
+  background: var(--accent);
+  color: white;
+  font-size: 24px;
 }
 
-/* ============================================= */
-/* COLUMNS                                       */
-/* ============================================= */
 .columns {
   display: flex;
   gap: 24px;
@@ -244,420 +168,145 @@ body.dark .top-bar {
   overflow-x: auto;
 }
 
-.column {
-  min-width: 280px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
+.column { min-width: 280px; }
 
 .column-title {
   font-size: 14px;
-  font-weight: bold;
   color: var(--muted);
+  margin-bottom: 12px;
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.column-title .dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-}
+.dot { width: 12px; height: 12px; border-radius: 50%; }
 
 [data-col="todo"] .dot { background: var(--todo); }
 [data-col="doing"] .dot { background: var(--doing); }
 [data-col="done"] .dot { background: var(--done); }
 
-/* Task Card */
 .task-card {
   background: var(--card);
   padding: 18px;
   border-radius: 8px;
   box-shadow: var(--shadow);
-  cursor: pointer;
+  margin-bottom: 12px;
 }
 
-.task-card p {
+.priority-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  font-size: 12px;
+  border-radius: 6px;
+  color: white;
   font-weight: bold;
   margin-bottom: 8px;
 }
 
-.task-card span {
-  font-size: 13px;
-  color: var(--muted);
-}
+.priority-high { background: #ea5555; }
+.priority-medium { background: #f5a623; }
+.priority-low { background: #67e2ae; }
 
-/* ============================================= */
-/* FAB BUTTON                                    */
-/* ============================================= */
-.fab {
-  position: absolute;
-  right: 24px;
-  bottom: 24px;
-  background: var(--accent);
-  color: white;
-  border: none;
-  width: 56px;
-  height: 56px;
-  font-size: 28px;
-  border-radius: 50%;
-  display: none;
-}
-
-/* ============================================= */
-/* MODAL                                         */
-/* ============================================= */
+/* MODAL */
 .modal {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,.5);
   display: flex;
-  align-items: center;
   justify-content: center;
-  padding: 24px;
-  z-index: 30;
+  align-items: center;
+  transition: opacity .2s ease;
 }
 
-.modal.hidden {
-  display: none;
-}
+.modal.hidden { display: none; }
 
 .modal-content {
   background: var(--card);
-  width: 100%;
-  max-width: 480px;
   padding: 24px;
   border-radius: 8px;
-  position: relative;
-}
-
-.close-btn {
-  position: absolute;
-  right: 14px;
-  top: 12px;
-  font-size: 24px;
-  background: none;
-  border: none;
-  color: var(--muted);
-  cursor: pointer;
-}
-
-.modal-content form {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.modal-content input,
-.modal-content textarea,
-.modal-content select {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #d0d4e4;
-  border-radius: 6px;
-  background: var(--bg);
-  color: var(--text);
+  max-width: 480px;
 }
 
-.modal-actions {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 12px;
-}
-
-.danger-btn {
-  background: var(--danger);
-  border: none;
-  padding: 10px 16px;
-  border-radius: 6px;
-  color: white;
-  cursor: pointer;
-}
-
-.danger-btn:hover {
-  background: var(--danger-hover);
-}
-
-.secondary-btn {
-  background: var(--muted);
-  border: none;
-  padding: 10px 16px;
-  border-radius: 6px;
-  color: white;
-  cursor: pointer;
-}
-
-/* ============================================= */
-/* RESPONSIVE                                    */
-/* ============================================= */
+/* MOBILE */
 @media (max-width: 768px) {
 
+  .sidebar { transform: translateX(-100%); }
+  .close-sidebar-btn { display: block; }
+
+  .content { margin-left: 0; }
+
+  .primary-btn { display: none; }
+  .circle-btn { display: block; }
+  
+}
+
+
+/* =========================================================
+   RESPONSIVE LAYOUT
+========================================================= */
+
+@media (max-width: 1200px) {
+  .columns {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+}
+
+@media (max-width: 900px) {
+  .content.with-sidebar {
+    margin-left: 0;
+  }
+  
+}
+
+@media (max-width: 768px) {
+
+  /* Sidebar off-screen by default */
   .sidebar {
-    position: absolute;
-    height: 100%;
-    top: 0;
-    left: 0;
     transform: translateX(-100%);
+    position: fixed;
+    z-index: 200;
   }
 
-  .show-sidebar-btn {
+  /* When mobile opened */
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  /* Close button visible only on mobile */
+  .close-sidebar-btn {
     display: block;
+    margin-bottom: 20px;
   }
 
-  .top-bar {
-    padding: 16px;
+  /* Stretch content */
+  .content {
+    margin-left: 0 !important;
   }
 
-  .mobile-logo {
-    display: block;
-  }
-
+  /* Phone Top Bar */
   .primary-btn {
     display: none;
   }
-
   .circle-btn {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  .fab {
-    display: block;
+  /* ONE COLUMN ON MOBILE */
+  .columns {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
   }
-
 }
-/* =========================
-   SIDEBAR BASE
-========================= */
-#sidebar {
-  width: 260px;
-  transition: transform 0.3s ease;
-  position: fixed;
-  left: 0;
-  top: 0;
-  height: 100vh;
-  background: var(--card);
-  z-index: 20;
-}
+ @media (min-width: 768px) {
 
-/* =========================
-   DESKTOP HIDDEN
-========================= */
-.sidebar-hidden {
-  transform: translateX(-260px);
-}
-
-/* Show-sidebar eye button */
-#showSidebar.show-sidebar-btn {
-  position: fixed;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-/* Hide eye icon when sidebar is open */
-.hidden {
+.mobile-logo{
   display: none;
+  
 }
 
-/* =========================
-   MOBILE BEHAVIOUR
-========================= */
-@media (max-width: 768px) {
-  /* Sidebar hidden by default */
-  #sidebar {
-    transform: translateX(-260px);
-  }
-
-  /* When opened */
-  #sidebar.mobile-open {
-    transform: translateX(0);
-  }
-
-  /* Logo is visible only on mobile */
-  #mobileLogo {
-    display: block;
-  }
-}
-/* ========================= */
-/* SIDEBAR — BASE STYLING    */
-/* ========================= */
-.sidebar {
-  width: 260px;
-  background: var(--card);
-  height: 100vh;
-  padding: 20px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  border-right: 1px solid #ddd;
-  transition: transform 0.3s ease;
-  z-index: 1000;
-}
-/* Sidebar hidden (Desktop & Mobile) */
-.sidebar.hidden {
-  transform: translateX(-100%);
-}
-/* Close Sidebar Button (Mobile Only) */
-.close-sidebar-btn {
-  display: none; /* hidden on desktop */
-  background: none;
-  border: none;
-  font-size: 32px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-left: auto;
-}
-/* Show Sidebar Button */
-.show-sidebar-btn {
-  position: fixed;
-  top: 20px;
-  left: 10px;
-  background: var(--accent);
-  border: none;
-  color: #fff;
-  padding: 10px 14px;
-  font-size: 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  display: none; /* hidden by default */
-  z-index: 1100;
-}
-/* MOBILE RESPONSIVE */
-@media (max-width: 768px) {
-
-  /* Sidebar starts hidden */
-  .sidebar {
-    transform: translateX(-100%);
-  }
-
-  /* Close button appears */
-  .close-sidebar-btn {
-    display: block;
-  }
-}
-
-@media (min-width: 769px) {
-
-  /* Show Sidebar Button appears only when sidebar is hidden */
-  .show-sidebar-btn.visible {
-    display: block;
-  }
-
-  /* Sidebar is open by default */
-  .sidebar {
-    transform: translateX(0);
-  }
-}
-.priority-badge {
-  display:inline-block;
-  padding:6px 8px;
-  border-radius:6px;
-  font-weight:700;
-  font-size:12px;
-  color:white;
-}
-.priority-high { background:#EA5252; }   /* red */
-.priority-medium { background:#F5A623; } /* orange */
-.priority-low { background:#67E2AE; }    /* green */
-
-
-/* ---------- Modal polish & animations ---------- */
-.modal {
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 220ms ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.modal.visible {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.modal-content {
-  transform: translateY(10px) scale(0.995);
-  transition: transform 220ms ease, box-shadow 220ms ease;
-  box-shadow: 0 20px 50px rgba(10,10,25,0.15);
-}
-
-.modal.visible .modal-content {
-  transform: translateY(0) scale(1);
-}
-
-/* focus ring for accessibility */
-.modal-content :focus {
-  outline: 3px solid rgba(99,95,199,0.18);
-  outline-offset: 2px;
-}
-
-/* hide .hidden class behavior (modal) */
-.modal.hidden {
-  display: none;
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* button visuals inside modal */
-.primary-btn {
-  background: var(--accent);
-  color: #fff;
-  padding: 10px 14px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-}
-
-.secondary-btn {
-  background: var(--muted);
-  color: white;
-  border: none;
-  padding: 10px 12px;
-  border-radius: 8px;
-}
-
-.danger-btn {
-  background: #ea5555;
-  color: #fff;
-  border: none;
-  padding: 10px 12px;
-  border-radius: 8px;
-}
-/* When sidebar is present, push content to the right (desktop) */
-.content {
-  transition: margin-left 0.28s ease, padding-left 0.28s ease;
-  margin-left: 0; /* default for mobile */
-}
-
-/* Desktop view: when sidebar visible, add left margin for content */
-@media (min-width: 769px) {
-  .content.with-sidebar {
-    margin-left: 260px; /* equal to sidebar width */
-  }
-}
-
-/* When sidebar hidden (eye button visible) reduce left margin */
-@media (min-width: 769px) {
-  .content {
-    margin-left: 260px; /* default when sidebar open */
-  }
-  .sidebar.hidden + .content,
-  .content:not(.with-sidebar) {
-    margin-left: 16px; /* small padding when sidebar hidden */
-  }
-}
-
-/* Show the eye button when sidebar.hidden (desktop) */
-.show-sidebar-btn {
-  display: none;
-}
-.show-sidebar-btn.visible {
-  display: block;
-}
-
+ }

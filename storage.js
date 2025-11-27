@@ -3,7 +3,9 @@ export const STORAGE_KEY = "kanban.tasks.v1";
 
 /** Generate unique id */
 export function uid() {
-  return (crypto && crypto.randomUUID) ? crypto.randomUUID() : "id-" + Date.now().toString(36) + Math.random().toString(36).slice(2);
+  return (crypto && crypto.randomUUID)
+    ? crypto.randomUUID()
+    : "id-" + Date.now().toString(36) + Math.random().toString(36).slice(2);
 }
 
 /** Load tasks or seed initial data */
@@ -13,7 +15,7 @@ export function loadTasks() {
     try {
       return JSON.parse(raw);
     } catch (e) {
-      console.error("Failed to parse tasks from localStorage:", e);
+      console.error("Failed to parse tasks:", e);
       localStorage.removeItem(STORAGE_KEY);
     }
   }
@@ -23,6 +25,7 @@ export function loadTasks() {
     { id: uid(), title: "Master JavaScript 💛", desc: "Deep JS study.", status: "doing", priority: "medium" },
     { id: uid(), title: "Have fun 😺", desc: "Enjoy learning!", status: "done", priority: "low" },
   ];
+
   saveTasks(seed);
   return seed;
 }
@@ -49,11 +52,6 @@ export function updateTask(id, changes) {
 }
 
 export function deleteTask(id) {
-  let tasks = loadTasks();
-  tasks = tasks.filter(t => t.id !== id);
+  const tasks = loadTasks().filter(t => t.id !== id);
   saveTasks(tasks);
-}
-
-export function getTask(id) {
-  return loadTasks().find(t => t.id === id);
 }

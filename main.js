@@ -1,101 +1,191 @@
-/* ===============================
-   SIDEBAR SHOW / HIDE LOGIC
-================================ */
-
+/* =========================================================
+   SELECT ELEMENTS
+========================================================= */
 const sidebar = document.getElementById("sidebar");
-const hideSidebarBtn = document.getElementById("hideSidebar");  // inside sidebar
-const showSidebarBtn = document.getElementById("showSidebar");  // outside sidebar
-const closeSidebarBtn = document.getElementById("closeSidebar"); // mobile only
+const showSidebarBtn = document.getElementById("showSidebar");
+const hideSidebarBtn = document.getElementById("hideSidebar");
+const closeSidebarBtn = document.getElementById("closeSidebar");
 
-/* ===============================
-   DESKTOP: Hide Sidebar
-================================ */
+const mobileLogo = document.getElementById("mobileLogo");
+
+const content = document.getElementById("content");
+
+const addTaskDesktop = document.getElementById("addTaskBtn");
+const addTaskMobile = document.getElementById("addTaskMobile");
+
+const modal = document.getElementById("taskModal");
+const closeModalBtn = document.getElementById("closeModal");
+
+const taskForm = document.getElementById("taskForm");
+
+const themeToggle = document.getElementById("themeToggle");
+
+const todoColumn = document.getElementById("todoTasks");
+const doingColumn = document.getElementById("doingTasks");
+const doneColumn = document.getElementById("doneTasks");
+
+/* For Edit / Delete */
+let editingTask = null;
+
+
+/* =========================================================
+   SIDEBAR — DESKTOP
+========================================================= */
 hideSidebarBtn.addEventListener("click", () => {
-  sidebar.classList.add("hidden");      // slide out
-  showSidebarBtn.classList.add("visible"); // show the 👁 button
+  sidebar.classList.add("hidden");
+  showSidebarBtn.classList.add("visible");
+  content.classList.remove("with-sidebar");
 });
 
-/* ===============================
-   DESKTOP: Show Sidebar
-================================ */
 showSidebarBtn.addEventListener("click", () => {
-  sidebar.classList.remove("hidden");   // slide back in
+  sidebar.classList.remove("hidden");
   showSidebarBtn.classList.remove("visible");
+  content.classList.add("with-sidebar");
 });
 
-/* ===============================
-   MOBILE: Open sidebar by tapping logo
-================================ */
-const logo = document.querySelector(".sidebar-logo");
 
-logo.addEventListener("click", () => {
-  // open only on mobile
-  if (window.innerWidth <= 768) {
-    sidebar.classList.remove("hidden");
-  }
+/* =========================================================
+   SIDEBAR — MOBILE
+========================================================= */
+mobileLogo.addEventListener("click", () => {
+  sidebar.classList.add("mobile-open");
 });
 
-/* ===============================
-   MOBILE: Close sidebar (X button)
-================================ */
-if (closeSidebarBtn) {
-  closeSidebarBtn.addEventListener("click", () => {
-    sidebar.classList.add("hidden");
-  });
+closeSidebarBtn.addEventListener("click", () => {
+  sidebar.classList.remove("mobile-open");
+});
+
+
+/* =========================================================
+   THEME TOGGLE
+========================================================= */
+themeToggle.addEventListener("change", () => {
+  document.body.classList.toggle("dark");
+});
+
+
+/* =========================================================
+   OPEN MODAL (ADD MODE)
+========================================================= */
+function openAddModal() {
+  editingTask = null;
+
+  document.getElementById("modalTitle").textContent = "Add Task";
+  document.getElementById("deleteTaskBtn").classList.add("hidden");
+
+  taskForm.reset();
+  modal.classList.remove("hidden");
 }
 
-/* ===============================
-   AUTO HANDLING WHEN RESIZING
-================================ */
-window.addEventListener("resize", () => {
-  if (window.innerWidth > 768) {
-    // Desktop → sidebar always visible
-    sidebar.classList.remove("hidden");
-    showSidebarBtn.classList.remove("visible");
-  } else {
-    // Mobile → sidebar hidden by default
-    sidebar.classList.add("hidden");
-  }
+addTaskDesktop.addEventListener("click", openAddModal);
+addTaskMobile.addEventListener("click", openAddModal);
+
+
+/* =========================================================
+   CLOSE MODAL
+========================================================= */
+closeModalBtn.addEventListener("click", () => {
+  modal.classList.add("hidden");
 });
-// Sidebar wiring + content shift
-function wireSidebar() {
-  const sidebar = document.getElementById("sidebar");
-  const hideBtn = document.getElementById("hideSidebar");
-  const showBtn = document.getElementById("showSidebar");
-  const mobileLogo = document.getElementById("mobileLogo");
-  const closeMobile = document.getElementById("closeSidebar");
-  const content = document.querySelector(".content");
 
-  const openSidebar = () => {
-    sidebar.classList.remove("hidden");
-    if (showBtn) showBtn.classList.remove("visible");
-    if (content) content.classList.add("with-sidebar");
-  };
-  const closeSidebar = () => {
-    sidebar.classList.add("hidden");
-    if (showBtn) showBtn.classList.add("visible");
-    if (content) content.classList.remove("with-sidebar");
-  };
 
-  // initial state based on screen size
-  if (window.innerWidth > 768) {
-    openSidebar();
+/* =========================================================
+   CREATE OR EDIT TASK (SUBMIT)
+========================================================= */
+taskForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const title = document.getElementById("taskTitle").value.trim();
+  const description = document.getElementById("taskDescription").value.trim();
+  const status = document.getElementById("taskStatus").value;
+  const priority = document.getElementById("taskPriority").value;
+
+  if (!title) return;
+
+  if (editingTask) {
+    updateTask(editingTask, title, description, status, priority);
   } else {
-    closeSidebar();
+    createTaskCard(title, description, status, priority);
   }
 
-  if (hideBtn) hideBtn.addEventListener("click", closeSidebar);
-  if (showBtn) showBtn.addEventListener("click", openSidebar);
+  modal.classList.add("hidden");
+});
 
-  if (mobileLogo) {
-    mobileLogo.addEventListener("click", () => {
-      if (window.innerWidth <= 768) openSidebar();
-    });
-  }
-  if (closeMobile) closeMobile.addEventListener("click", closeSidebar);
 
-  window.addEventListener("resize", () => {
-    if (window.innerWidth > 768) openSidebar();
-    else closeSidebar();
-  });
+/* =========================================================
+   CREATE TASK CARD
+========================================================= */
+function createTaskCard(title, description, status, priority) {
+  const card = document.createElement("div");
+  card.classList.add("task-card");
+
+  card.innerHTML = `
+    <div class="priority-badge priority-${priority}">${priority.toUpperCase()}</div>
+    <p class="task-title">${title}</p>
+    <span class="task-desc">${description || "No description"}</span>
+  `;
+
+  card.addEventListener("click", () => openEditModal(card));
+
+  appendToColumn(card, status);
 }
+
+
+/* =========================================================
+   MOVE TASK TO CORRECT COLUMN
+========================================================= */
+function appendToColumn(card, status) {
+  if (status === "todo") todoColumn.appendChild(card);
+  if (status === "doing") doingColumn.appendChild(card);
+  if (status === "done") doneColumn.appendChild(card);
+}
+
+
+/* =========================================================
+   OPEN EDIT MODE
+========================================================= */
+function openEditModal(card) {
+  editingTask = card;
+
+  const title = card.querySelector(".task-title").textContent;
+  const description = card.querySelector(".task-desc").textContent;
+  const priority = card.querySelector(".priority-badge").textContent.toLowerCase();
+
+  document.getElementById("modalTitle").textContent = "Edit Task";
+  document.getElementById("taskTitle").value = title;
+  document.getElementById("taskDescription").value = description;
+  document.getElementById("taskPriority").value = priority;
+
+  // detect current column
+  if (todoColumn.contains(card)) document.getElementById("taskStatus").value = "todo";
+  if (doingColumn.contains(card)) document.getElementById("taskStatus").value = "doing";
+  if (doneColumn.contains(card)) document.getElementById("taskStatus").value = "done";
+
+  document.getElementById("deleteTaskBtn").classList.remove("hidden");
+
+  modal.classList.remove("hidden");
+}
+
+
+/* =========================================================
+   UPDATE EXISTING TASK
+========================================================= */
+function updateTask(card, title, description, status, priority) {
+  card.querySelector(".task-title").textContent = title;
+  card.querySelector(".task-desc").textContent = description || "No description";
+
+  const badge = card.querySelector(".priority-badge");
+  badge.textContent = priority.toUpperCase();
+  badge.className = `priority-badge priority-${priority}`;
+
+  appendToColumn(card, status);
+}
+
+
+/* =========================================================
+   DELETE TASK
+========================================================= */
+document.getElementById("deleteTaskBtn").addEventListener("click", () => {
+  if (editingTask) editingTask.remove();
+  modal.classList.add("hidden");
+});
