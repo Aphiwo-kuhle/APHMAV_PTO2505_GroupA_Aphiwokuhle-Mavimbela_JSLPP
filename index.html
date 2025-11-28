@@ -11,7 +11,7 @@
 
 <!-- SHOW SIDEBAR BUTTON (DESKTOP WHEN HIDDEN) -->
 <button id="showSidebar" class="show-sidebar-btn hidden" aria-label="Show sidebar">
-  <img src="assets/favicon.svg" alt="" class="show-sidebar-icon" />
+  <img src="assets/icon-show-sidebar.svg" alt="" class="show-sidebar-icon" />
 </button>
 
 <div id="sidebarOverlay" class="sidebar-overlay"></div>
@@ -30,18 +30,25 @@
       <div class="board-item active">Launch Career</div>
     </div>
 
- <div class="theme-toggle-block">
-  <span class="theme-icon">☀️</span>
+<div class="theme-toggle-block">
+  <img src="assets/icon-light-theme.svg" alt="Light mode" class="theme-icon-img">
 
   <label class="switch">
     <input type="checkbox" id="themeToggle" />
     <span class="slider"></span>
   </label>
 
-  <span class="theme-icon">🌙</span>
+  <img src="assets/icon-dark-theme.svg" alt="Dark mode" class="theme-icon-img">
 </div>
 
-    <button id="hideSidebar" class="hide-sidebar-btn">Hide Sidebar</button>
+
+    <button id="hideSidebar" class="hide-sidebar-btn">
+  <span class="hide-icon">
+    <img src="assets/icon-hide-sidebar.svg" alt="" />
+  </span>
+  <span>Hide Sidebar</span>
+</button>
+
   </aside>
 
   <!-- MAIN CONTENT -->
@@ -116,7 +123,7 @@
           <option value="low">Low</option>
         </select>
 
-        <div class="mo0dal-actions">
+        <div class="modal-actions">
           <button type="button" id="deleteTaskBtn" class="danger-btn hidden">
             Delete
           </button>
