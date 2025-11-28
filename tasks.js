@@ -1,75 +1,90 @@
 // tasks.js
-import { loadTasks } from "./storage.js";
+import { getTasks } from "./storage.js";
 
-/** Render whole board */
-export function renderBoard() {
-  const tasks = loadTasks();
-  const priorityOrder = { high: 0, medium: 1, low: 2 };
+// high → medium → low
+const PRIORITY_ORDER = { high: 0, medium: 1, low: 2 };
 
-  const todo = tasks.filter(t => t.status === "todo").sort(sortByPriority);
-  const doing = tasks.filter(t => t.status === "doing").sort(sortByPriority);
-  const done = tasks.filter(t => t.status === "done").sort(sortByPriority);
+/**
+ * Render all tasks into the three columns.
+ * @param {(id:string)=>void} onTaskClick callback when a card is clicked
+ */
+export function renderBoard(onTaskClick) {
+  const all = getTasks();
 
-  paintList("todoList", todo);
-  paintList("doingList", doing);
-  paintList("doneList", done);
+  const groups = {
+    todo: [],
+    doing: [],
+    done: [],
+  };
 
-  setCount("todoCount", todo.length);
-  setCount("doingCount", doing.length);
-  setCount("doneCount", done.length);
+  all.forEach((t) => {
+    if (!groups[t.status]) groups[t.status] = [];
+    groups[t.status].push(t);
+  });
 
-  function sortByPriority(a, b) {
-    return priorityOrder[a.priority] - priorityOrder[b.priority];
-  }
+  ["todo", "doing", "done"].forEach((status) => {
+    const tasks = (groups[status] || []).sort(sortByPriority);
+    paintList(status, tasks, onTaskClick);
+  });
 }
 
-function setCount(id, count) {
-  const el = document.getElementById(id);
-  if (el) el.textContent = count;
+/**
+ * Sort tasks by priority, high to low.
+ */
+function sortByPriority(a, b) {
+  return PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority];
 }
 
-function paintList(id, tasks) {
-  const list = document.getElementById(id);
+/**
+ * Render a single column's list.
+ * @param {"todo"|"doing"|"done"} status
+ * @param {Array<object>} tasks
+ * @param {(id:string)=>void} onTaskClick
+ */
+function paintList(status, tasks, onTaskClick) {
+  const list = document.getElementById(`${status}Tasks`);
   if (!list) return;
+
   list.innerHTML = "";
-  tasks.forEach(t => list.appendChild(taskCard(t)));
+
+  tasks.forEach((task) => {
+    const card = createTaskCard(task);
+    if (typeof onTaskClick === "function") {
+      card.addEventListener("click", () => onTaskClick(task.id));
+    }
+    list.appendChild(card);
+  });
 }
 
-function taskCard(task) {
-  const el = document.createElement("article");
-  el.className = "task-card";
-  el.dataset.id = task.id;
+/**
+ * Create a DOM node for a task.
+ * @param {object} task
+ * @returns {HTMLElement}
+ */
+function createTaskCard(task) {
+  const article = document.createElement("article");
+  article.className = "task-card";
+  article.dataset.id = task.id;
 
   const priorityClass = `priority-${task.priority}`;
   const priorityLabel = task.priority.toUpperCase();
 
-  el.innerHTML = `
-    <p>${escapeHtml(task.title)}</p>
-    <span>${escapeHtml(task.desc)}</span>
+  article.innerHTML = `
     <div class="priority-badge ${priorityClass}">${priorityLabel}</div>
+    <p class="task-card-title">${escapeHtml(task.title)}</p>
+    <span class="task-card-desc">
+      ${escapeHtml(task.desc || "No description")}
+    </span>
   `;
 
-  return el;
+  return article;
 }
 
-function escapeHtml(str) {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
+/**
+ * Basic HTML escaping to prevent layout issues.
+ * @param {string} str
+ * @returns {string}
+ */
+function escapeHtml(str = "") {
+  return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
-// =========================
-// tasks.js
-// Handles: create task, render tasks, load tasks
-// =========================
-
-import { getTasks, saveTasks } from "./storage.js";
-
-// DOM references
-const modal = document.getElementById("taskModal");
-const form = document.getElementById("taskForm");
-const taskTitle = document.getElementById("taskTitle");
-const taskDesc = document.getElementById("taskDescription");
-const taskStatus = document.getElementById("taskStatus");
-
-const colTodo = document.getElementBy

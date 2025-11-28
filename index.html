@@ -9,103 +9,125 @@
 
 <body class="light">
 
-  <!-- SHOW SIDEBAR BUTTON -->
-  <button id="showSidebar" class="show-sidebar-btn hidden">☰</button>
+<!-- SHOW SIDEBAR BUTTON (DESKTOP WHEN HIDDEN) -->
+<button id="showSidebar" class="show-sidebar-btn hidden" aria-label="Show sidebar">
+  <img src="assets/favicon.svg" alt="" class="show-sidebar-icon" />
+</button>
+
+<div id="sidebarOverlay" class="sidebar-overlay"></div>
 
   <!-- SIDEBAR -->
   <aside id="sidebar" class="sidebar">
+    <!-- Mobile close button -->
     <button id="closeSidebar" class="close-sidebar-btn">×</button>
 
-    <img src="assets/logo-light.svg" class="sidebar-logo" />
+    <!-- Logo (desktop) -->
+<img src="assets/logo-light.svg" class="sidebar-logo" id="sidebarLogo" alt="Kanban logo" />
+
 
     <h3 class="sidebar-title">ALL BOARDS</h3>
     <div id="boardList">
-      <div class="board-item active">My Kanban</div>
+      <div class="board-item active">Launch Career</div>
     </div>
 
-    <div class="theme-toggle-block">
-      <span>Dark Mode</span>
-      <label class="switch">
-        <input type="checkbox" id="themeToggle">
-        <span class="slider"></span>
-      </label>
-    </div>
+ <div class="theme-toggle-block">
+  <span class="theme-icon">☀️</span>
+
+  <label class="switch">
+    <input type="checkbox" id="themeToggle" />
+    <span class="slider"></span>
+  </label>
+
+  <span class="theme-icon">🌙</span>
+</div>
 
     <button id="hideSidebar" class="hide-sidebar-btn">Hide Sidebar</button>
   </aside>
 
-  <!-- CONTENT -->
+  <!-- MAIN CONTENT -->
   <main id="content" class="content with-sidebar">
-
     <!-- TOP BAR -->
     <div class="top-bar">
       <div class="top-left">
-        <img src="assets/favicon.svg" id="mobileLogo" class="mobile-logo" />
-        <h2>Kanban Board</h2>
+        <!-- Mobile logo that opens menu -->
+        <img src="assets/favicon.svg" id="mobileLogo" class="mobile-logo" alt="Menu" />
+        <h2 class="top-title">Launch Career</h2>
       </div>
 
       <button id="addTaskBtn" class="primary-btn">+ Add New Task</button>
       <button id="addTaskMobile" class="circle-btn">+</button>
     </div>
 
+    <!-- LOADING / ERROR MESSAGE -->
+    <p id="boardMessage" class="board-message"></p>
+
     <!-- COLUMNS -->
     <section class="columns" id="columns">
       <div class="column" data-col="todo">
-        <h3 class="column-title"><span class="dot"></span> Todo</h3>
+        <h3 class="column-title">
+          <span class="dot"></span> To Do
+        </h3>
         <div class="task-list" id="todoTasks"></div>
       </div>
 
       <div class="column" data-col="doing">
-        <h3 class="column-title"><span class="dot"></span> Doing</h3>
+        <h3 class="column-title">
+          <span class="dot"></span> Doing
+        </h3>
         <div class="task-list" id="doingTasks"></div>
       </div>
 
       <div class="column" data-col="done">
-        <h3 class="column-title"><span class="dot"></span> Done</h3>
+        <h3 class="column-title">
+          <span class="dot"></span> Done
+        </h3>
         <div class="task-list" id="doneTasks"></div>
       </div>
     </section>
   </main>
 
   <!-- MODAL -->
-  <div id="taskModal" class="modal hidden">
+  <div id="taskModal" class="modal hidden" aria-hidden="true">
     <div class="modal-content">
-      <button id="closeModal" class="close-btn">×</button>
+      <button id="closeModal" class="close-btn" aria-label="Close modal">×</button>
 
       <h2 id="modalTitle">Add Task</h2>
 
       <form id="taskForm">
         <input type="hidden" id="taskId">
 
-        <label>Title</label>
-        <input type="text" id="taskTitle" required>
+        <label for="taskTitle">Title</label>
+        <input type="text" id="taskTitle" required />
 
-        <label>Description</label>
+        <label for="taskDescription">Description</label>
         <textarea id="taskDescription" rows="4"></textarea>
 
-        <label>Status</label>
+        <label for="taskStatus">Status</label>
         <select id="taskStatus">
-          <option value="todo">Todo</option>
+          <option value="todo">To Do</option>
           <option value="doing">Doing</option>
           <option value="done">Done</option>
         </select>
 
-        <label>Priority</label>
+        <label for="taskPriority">Priority</label>
         <select id="taskPriority">
           <option value="high">High</option>
-          <option value="medium">Medium</option>
+          <option value="medium" selected>Medium</option>
           <option value="low">Low</option>
         </select>
 
-        <div class="modal-actions">
-          <button type="button" id="deleteTaskBtn" class="danger-btn hidden">Delete</button>
-          <button type="submit" class="primary-btn">Save Task</button>
+        <div class="mo0dal-actions">
+          <button type="button" id="deleteTaskBtn" class="danger-btn hidden">
+            Delete
+          </button>
+          <button type="submit" class="primary-btn">
+            Save Task
+          </button>
         </div>
       </form>
     </div>
   </div>
 
   <script type="module" src="main.js"></script>
-
 </body>
 </html>
