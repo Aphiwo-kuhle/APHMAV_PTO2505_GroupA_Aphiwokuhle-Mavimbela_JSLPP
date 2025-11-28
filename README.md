@@ -1,96 +1,201 @@
-# JSL Portfolio Piece: Kanban App Deployment & Features Implementation
 
-## Overview
 
-This project involves **deploying a Kanban app to Netlify**, ensuring the app's functionality and persistence through local storage, and implementing dynamic features such as task editing, deletion, sidebar interaction, and a theme toggle. The goal is to deliver a fully functional, deployable application that is responsive across devices and maintains data consistency. Students will also focus on **clean, modular code** that is well-documented for future development.
+# 🚀 Kanban Task Board  
+A clean, modern, responsive Kanban board application that allows users to create, edit, delete, and organize tasks across "To Do", "Doing", and "Done" columns — with full mobile support, dark mode, local storage persistence, and smooth sidebar interactions.
 
-## WHAT to Submit
+---
 
-- **JSLPP GitHub Repo**: Your JSLPP GitHub repository
-- **Recorded Presentation:** A **5-10 minutes** presentation of your project demonstrating and talking through how you solved the user stories. No slides are neccessary and you will rather showcase your code and project features as you talk through your solutions.
-  - You can use any of these tools to record your presentation [Veed.io](https://www.veed.io/) [Windows recording](https://www.microsoft.com/en-us/windows/learning-center/how-to-record-screen-windows-11), [Zoom](https://www.zoom.com/), [Loom](https://www.loom.com/), [OBS](https://obsproject.com/), [Screencastify](https://www.screencastify.com/)
-  - Make sure your recorded presentation link is publicly accessible and is included in your GitHub README.
+## 🌈 Features Overview
 
-## HOW to Submit Your Project
+This Kanban Board is built to deliver a seamless and intuitive task-management experience. Below is a complete breakdown of all the powerful features included in the application.
 
-- Push Final Version to GitHub: Ensure your final work is on GitHub.
-- Project Naming Convention: Make sure the name of your GitHub Repository is correct with the right naming convention. The naming convention is given in the GitHub Repo title. `StudentNo_Classcode_Group_Name-Surname_JSLPP`
-- Include Presentation Assets: Include your recorded presentation link in your GitHub README.
-- Deployment Link: Include a link to your deployed app in your GitHub README.
-- Provide LMS Link: Submit your Project GitHub link via the [Projects] tab > JSLPP PORTFOLIO PIECE > on the Learning Management System.
+---
 
-## Before You Begin
+## 📌 1. Task Management  
+### ✔ Create Tasks  
+Users can add new tasks through a modal form available on both desktop and mobile.
 
-**Check out the [Figma Reference File](https://www.figma.com/design/y7bFCUYL5ZHfPeojACBXg2/Challenges-%7C-JSL?node-id=6033-11092&t=XbQhBWPYxXDAqp3x-1) and the project user stories in your student dashboard** before you start building.
+### ✔ Edit Tasks  
+Tapping or clicking a task card opens the modal in **edit mode**, allowing users to modify:
 
-## Key Objectives
+- Title  
+- Description  
+- Status (To Do / Doing / Done)  
+- Priority (High / Medium / Low)
 
-### Deployment & Hosting
+### ✔ Delete Tasks  
+Tasks can be deleted directly from the edit modal with a confirmation step for safety.
 
-- **Prepare the Kanban app files** for deployment, ensuring the project structure aligns with best practices for deployment.
-- **Deploy the Kanban app to Netlify**, following the process of uploading your project and setting a custom deployment link.
-- Test the deployed app to ensure that all features, including task creation, editing, local storage, and sorting, work as expected in a live environment.
+### ✔ Automatic Task Grouping  
+Tasks are grouped by status and sorted by priority (High → Medium → Low).
 
-### Initial Data Fetching & Loading State
+---
 
-- **Fetch tasks dynamically** from an API: https://jsl-kanban-api.vercel.app/
+## 💾 2. Data Persistence  
+### ✔ Fetch Initial Data from API  
+On first load:
 
-- **Replace any hard-coded task data**, to ensure the application receives the most up-to-date tasks.
+1. The app attempts to fetch starter tasks from a public API.  
+2. If successful, results are normalized and saved locally.  
+3. If the API fails, fallback seed data is used.
 
-- **Display a loading message** while the tasks are being fetched so that users are informed the data is loading.
-- If fetching fails, **show an error message** to alert users to the issue.
+### ✔ Local Storage Sync  
+All task operations (add, update, delete) are saved to `localStorage`, ensuring:
 
-### Data Persistence
+- Tasks remain after refresh  
+- Tasks remain after closing the app  
+- No account needed — instant persistence  
 
-- **Store fetched tasks in local storage** to ensure data persists across page reloads.
-- On startup, **load tasks from local storage** and display them in their respective columns (To Do, Doing, Done) to maintain an organized task board.
+---
 
-### Task Editing & Deletion
+## 🌓 3. Dark & Light Theme Toggle  
+### ✔ Custom Sun & Moon Icons  
+A theme switcher with user-provided icons allows toggling between **light mode** and **dark mode**.
 
-- Allow users to **edit task details** (title, description, status) in a modal. Upon saving, the task should reflect the updated data on the board and in local storage.
-- Implement a **delete button** within the modal to allow users to remove tasks. A confirmation message should appear before deleting a task, and if confirmed, the task will be removed from both the task board and local storage.
+### ✔ Automatic Logo Switching  
+The sidebar logo switches between `logo-light.svg` and `logo-dark.svg` when the theme changes.
 
-### Sidebar Interaction
+### ✔ Theme Memory  
+The selected theme is saved in `localStorage` under `kanban.theme`, so the user’s preference always loads automatically.
 
-- Implement a **sidebar** that contains all required elements as shown in the Figma design.
-- Allow the sidebar to be **toggleable**, so users can hide or show it based on their preferences.
-- Provide a mobile version of the sidebar that can be **accessed from the app logo**, and ensure it matches the design and functionality of the desktop sidebar.
+---
 
-### Mobile Sidebar (Menu) Functionality
+## 📱 4. Fully Responsive Design  
+This app is designed to work beautifully on every device:
 
-- On mobile, the sidebar should function as a **menu** accessible from the top of the screen.
-- Include the **theme toggle** switch in the mobile menu and ensure all features match the desktop sidebar, as shown in the Figma design.
-- Ensure that the mobile menu is **closable**, allowing users to dismiss it for an unobstructed view of the tasks.
+### ✔ Mobile Mode  
+- Sidebar becomes a floating card with smooth animations.  
+- A dimmed overlay appears behind the sidebar for better focus.  
+- The "Add Task" button becomes a circular + icon.  
+- Modals expand to full height with scroll support.  
+- Save/Delete buttons remain accessible at the bottom.
 
-### Theme Toggle (Dark/Light Mode)
+### ✔ Desktop Mode  
+- Sidebar is fixed on the left.  
+- A custom “eye” button allows showing the sidebar when hidden.  
+- Three task columns are displayed side-by-side.
 
-- Include a **theme toggle switch** to allow users to switch between dark mode and light mode.
-- The toggle should be functional in both the **desktop sidebar** and the **mobile menu** for consistent theme switching across devices.
-- Ensure all elements of the **Kanban board** are styled appropriately in dark mode, ensuring good contrast and readability.
+---
 
-### Stretch Goal: Adding Priority (Optional)
+## 🪟 5. Sidebar Controls  
+### ✔ Desktop  
+- **Hide Sidebar** button hides the sidebar and shows a floating eye icon.  
+- **Show Sidebar** eye icon slides the sidebar back in.  
 
-Enhance your task management application by introducing a **priority system**. Users should be able to select a priority level—**High, Medium, or Low**—when creating or editing tasks. The priority should be:
+### ✔ Mobile  
+- Sidebar opens when tapping the mobile logo.  
+- Sidebar closes when tapping the close (X) button or the overlay.  
 
-- **Visually displayed** on each task card as shown on the Figma design to clearly communicate urgency.
-- **Saved to local storage** to ensure persistence across page reloads.
-- **Editable** so users can adjust a task's importance as needed.
-- **Reflected immediately** on the UI upon changes.
-- **Sorted automatically** within each status column by priority (High → Medium → Low), with **High-priority tasks appearing at the top**.
-- **Persistently ordered**, maintaining correct priority display after refreshing the page.
+---
 
-## Code Quality & Maintainability
+## 🗂 Folder Structure
 
-- **Break the code into separate modules** with clear responsibilities (e.g., local storage handling, task rendering, modal management) to improve maintainability and scalability.
-- Use **descriptive, meaningful variable and function names** to make the code easy to understand.
-- **Document every major function and module** using **JSDoc comments** to explain the purpose, parameters, and return values of each part of the code.
+📁 project
+├── index.html
+├── style.css
+├── main.js
+├── tasks.js
+├── storage.js
+└── assets/
+├── logo-light.svg
+├── logo-dark.svg
+├── sun.svg
+├── moon.svg
+└── your-icons-here
 
-## Expected Outcome
+yaml
+Copy code
 
-A fully functional Kanban app that:
+---
 
-- Dynamically fetches and displays tasks.
-- Supports task editing, deletion, and persistent storage through local storage.
-- Has a responsive, mobile-friendly sidebar with a theme toggle switch.
-- App deployed to **Netlify** with a custom, readable URL.
-- Uses modular, well-documented code that is easy to maintain and scale.
+## 🛠 Installation & Setup
+
+### 1️⃣ Clone the repository
+```bash
+git clone https://github.com/your-username/kanban-board.git
+2️⃣ Open the project folder
+bash
+Copy code
+cd kanban-board
+3️⃣ Start a local server
+Use any method (VSCode Live Server is easiest), or:
+
+bash
+Copy code
+npx http-server .
+4️⃣ Open in browser
+arduino
+Copy code
+http://localhost:8080
+📘 Technology Used
+Technology Purpose
+HTML5 Structure of the app
+CSS3 Styling, grid, responsive design, dark/light mode
+JavaScript (ES Modules) App logic, data handling, DOM interactions
+LocalStorage API Data persistence
+External Tasks API Initial task data
+
+🎨 UI/UX Highlights
+Clean minimal design
+
+Professional theme toggle component
+
+Beautiful sidebar animations
+
+Priority color badges
+
+Smooth modal transitions
+
+Mobile-first optimizations
+
+🧪 Future Improvements (Optional)
+These can be added later:
+
+Drag & drop tasks between columns
+
+Multiple boards
+
+User accounts with backend sync
+
+Due dates + reminders
+
+Custom themes
+
+👨‍💻 Author
+Your Name
+Frontend Developer
+Passionate about clean design, modern UI, and building efficient user-centered applications.
+
+⭐ Support
+If you love this project, please consider giving it a ⭐ star on GitHub!
+It helps others discover the project and motivates future improvements.
+
+🏆 Final Words
+This app is a showcase of:
+
+Clean, scalable architecture
+
+Beautiful UI design
+
+Real-world task management logic
+
+Professional frontend engineering practices
+
+Built with care, creativity, and an eye for detail.
+Enjoy your Kanban Board!
+
+yaml
+Copy code
+
+---
+
+# 🌟 If you want an even more spectacular README…
+I can add:
+
+✅ Screenshots section  
+✅ GIF demo of the app  
+✅ Installation badges  
+✅ Live demo link  
+✅ Color palette  
+✅ Technology badges (HTML, CSS, JS)  
+
