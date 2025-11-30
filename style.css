@@ -508,12 +508,7 @@ body {
         grid-template-columns: 1fr;
         padding-inline: 16px;
     }
-}
-@media (max-width: 768px) {
 
-    body {
-        overflow: auto;
-    }
 
     /* Sidebar becomes a floating card, not a drawer */
     .sidebar {
@@ -574,6 +569,18 @@ body {
         grid-template-columns: 1fr;
         padding-inline: 16px;
     }
+    .top-title{
+        display: none;
+    }
+    .sidebar-logo{
+        display:none;
+    }
+.sidebar-sign{
+    display:none;
+
+}
+.logo-sign{
+    display:none;}
 }
 .modal {
     position: fixed;
